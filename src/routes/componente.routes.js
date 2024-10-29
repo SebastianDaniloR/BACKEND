@@ -14,9 +14,9 @@ import { createComponenteSchema } from "../schemas/componente.schema.js";
 
 const router = Router();
 
-router.get("/componentes", authRequired, getComponentes);
-router.get("/componentes/:id", authRequired, getComponenteById);
-router.get("/componentes-serial", authRequired, getComponenteBySerial); // Nueva ruta para buscar por serial
+router.get("/componentes",  getComponentes);
+router.get("/componentes/:id", getComponenteById);
+router.get("/componentes-serial", getComponenteBySerial); // Nueva ruta para buscar por serial
 router.post(
   "/componentes",
   authRequired,

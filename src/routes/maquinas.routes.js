@@ -18,13 +18,13 @@ const router = Router();
 
 // Rutas existentes
 router.get("/maquina", traerMaquinas);
-router.get("/maquina/all", authRequired, traerTodasMaquinas);
-router.get("/maquina/serial", authRequired, buscarMaquinaPorNumeroDeSerie); // Búsqueda exacta
-router.get("/maquina/casino", authRequired, traerMaquinasPorCasino);
-router.get("/maquina/:id", authRequired, traerMaquina);
+router.get("/maquina/all", traerTodasMaquinas);
+router.get("/maquina/serial", buscarMaquinaPorNumeroDeSerie); // Búsqueda exacta
+router.get("/maquina/casino",  traerMaquinasPorCasino);
+router.get("/maquina/:id",  traerMaquina);
 
 // Nueva ruta para la búsqueda flexible por número de serie
-router.get("/maquina/buscar/serie-flexible", authRequired, buscarMaquinaPorSerieFlexible); 
+router.get("/maquina/buscar/serie-flexible",buscarMaquinaPorSerieFlexible); 
 
 router.post(
   "/maquina",
