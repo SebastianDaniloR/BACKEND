@@ -17,7 +17,7 @@ import { createMaquinaSchema } from "../schemas/maquinas.schema.js";
 const router = Router();
 
 // Rutas existentes
-router.get("/maquina", authRequired, traerMaquinas);
+router.get("/maquina", traerMaquinas);
 router.get("/maquina/all", authRequired, traerTodasMaquinas);
 router.get("/maquina/serial", authRequired, buscarMaquinaPorNumeroDeSerie); // Búsqueda exacta
 router.get("/maquina/casino", authRequired, traerMaquinasPorCasino);
