@@ -42,11 +42,12 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
     console.log('Token creado:', token);
 
-    // Configuración de la cookie
+    // Configuración de la cookie para dominios cruzados
     res.cookie("token", token, {
-      httpOnly: true, // Evita el acceso al token desde JavaScript
+      httpOnly: true, // Protege el token contra el acceso desde JavaScript (mejora la seguridad)
       secure: process.env.NODE_ENV === 'production', // Solo enviar en HTTPS en producción
       sameSite: 'None', // Permite el envío de cookies en diferentes dominios
+      domain: 'tu-dominio-principal.com', // Configura el dominio principal
     });
 
     res.json({
@@ -71,18 +72,19 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const userFound = await User.findOne({ email });
-    if (!userFound) return res.status(400).json({ message: "user not found" });
+    if (!userFound) return res.status(400).json({ message: "Usuario no encontrado" });
 
     const isMatch = await bcrypt.compare(password, userFound.password);
-    if (!isMatch) return res.status(400).json({ message: "incorrect password" });
+    if (!isMatch) return res.status(400).json({ message: "Contraseña incorrecta" });
 
     const token = await createAccessToken({ id: userFound._id });
     
-    // Configuración de la cookie
+    // Configuración de la cookie para dominios cruzados
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'None',
+      domain: 'opalsasasapp.netlify.app', // Configura el dominio principal
     });
 
     res.json({
@@ -101,7 +103,11 @@ export const login = async (req, res) => {
 // Cierre de sesión
 export const logout = (req, res) => {
   res.cookie('token', "", {
-    expires: new Date(0)
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None',
+    domain: 'opalsasasapp.netlify.app', // Configura el dominio principal
+    expires: new Date(0), // Expira la cookie
   });
   return res.sendStatus(200);
 };
@@ -109,7 +115,7 @@ export const logout = (req, res) => {
 // Perfil de usuario
 export const profile = async (req, res) => {
   const userFound = await User.findById(req.user.id);
-  if (!userFound) return res.status(400).json({ message: "user not found" });
+  if (!userFound) return res.status(400).json({ message: "Usuario no encontrado" });
   return res.json({
     id: userFound._id,
     username: userFound.username,
@@ -137,17 +143,17 @@ export const getUserCount = async (req, res) => {
 export const verifyToken = async (req, res) => {
   try {
     const token = req.cookies.token;
-    if (!token) return res.status(401).json({ message: "No token provided" });
+    if (!token) return res.status(401).json({ message: "Token no proporcionado" });
 
     jwt.verify(token, TOKEN_SECRET, async (err, decoded) => {
-      if (err) return res.status(401).json({ message: "Unauthorized" });
+      if (err) return res.status(401).json({ message: "No autorizado" });
 
       const user = await User.findById(decoded.id);
-      if (!user) return res.status(404).json({ message: "User not found" });
+      if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
       res.json(user);
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Error en el servidor' });
   }
 };
