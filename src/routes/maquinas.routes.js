@@ -29,7 +29,6 @@ router.get("/maquina/buscar/serie-flexible",buscarMaquinaPorSerieFlexible);
 
 router.post(
   "/maquina",
-  authRequired, verifyToken,
   validateSchema(createMaquinaSchema),
   crearMaquina
 );
