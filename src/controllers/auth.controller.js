@@ -47,7 +47,7 @@ export const register = async (req, res) => {
       httpOnly: true, // Protege el token contra el acceso desde JavaScript (mejora la seguridad)
       secure: process.env.NODE_ENV === 'production', // Solo enviar en HTTPS en producción
       sameSite: 'None', // Permite el envío de cookies en diferentes dominios
-      domain: 'tu-dominio-principal.com', // Configura el dominio principal
+      domain: 'opalsasasapp.netlify.app', // Configura el dominio principal
     });
 
     res.json({
