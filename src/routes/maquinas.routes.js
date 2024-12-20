@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authRequired } from "../middlewares/validateToken.js";
+import {verifyToken} from "../controllers/auth.controller.js"
 import {
   traerMaquina,
   traerMaquinas,
@@ -28,7 +29,7 @@ router.get("/maquina/buscar/serie-flexible",buscarMaquinaPorSerieFlexible);
 
 router.post(
   "/maquina",
-  authRequired,
+  authRequired, verifyToken,
   validateSchema(createMaquinaSchema),
   crearMaquina
 );
